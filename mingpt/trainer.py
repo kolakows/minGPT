@@ -116,7 +116,7 @@ class Trainer:
         best_loss = float('inf')
         self.tokens = 0 # counter used for learning rate decay
 
-        sampler = LengthGroupedSampler(config.batch_size, self.train_dataset)
+        sampler = LengthGroupedSampler(config.batch_size, self.train_dataset.dataset)
         collator = DynamicCollator()
 
         train_loader = DataLoader(
