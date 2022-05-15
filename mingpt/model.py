@@ -105,7 +105,7 @@ class GPT(nn.Module):
         super().__init__()
 
         # input embedding stem
-        self.tok_emb = nn.Embedding(config.vocab_size, config.n_embd)
+        self.tok_emb = nn.Embedding(config.vocab_size, config.n_embd, padding_idx=0)
         self.pos_emb = nn.Parameter(torch.zeros(1, config.block_size, config.n_embd))
         self.drop = nn.Dropout(config.embd_pdrop)
         # transformer
