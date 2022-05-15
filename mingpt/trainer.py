@@ -14,6 +14,9 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data.dataloader import DataLoader
 
+from mingpt.additional_features.dynamic_collator import DynamicCollator
+from mingpt.additional_features.smart_sampler import LengthGroupedSampler
+
 logger = logging.getLogger(__name__)
 
 class TrainerConfig:
@@ -113,12 +116,17 @@ class Trainer:
         best_loss = float('inf')
         self.tokens = 0 # counter used for learning rate decay
 
+        sampler = LengthGroupedSampler(config.batch_size, self.train_dataset)
+        collator = DynamicCollator()
+
         train_loader = DataLoader(
             self.train_dataset,
             shuffle=True,
             pin_memory=True,
+            sampler=sampler,
             batch_size=config.batch_size,
-            num_workers=config.num_workers
+            num_workers=config.num_workers,
+            collate_fn=collator
         )
         if self.test_dataset is not None:
             test_loader = DataLoader(
