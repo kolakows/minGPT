@@ -122,7 +122,6 @@ class Trainer:
 
         train_loader = DataLoader(
             self.train_dataset,
-            shuffle=True,
             pin_memory=True,
             sampler=sampler,
             batch_size=config.batch_size,
