@@ -34,6 +34,7 @@ class TrainerConfig:
     # checkpoint settings
     ckpt_path = None
     num_workers = 0 # for DataLoader
+    block_size = None
 
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
@@ -117,7 +118,7 @@ class Trainer:
         self.tokens = 0 # counter used for learning rate decay
 
         sampler = LengthGroupedSampler(config.batch_size, self.train_dataset.dataset)
-        collator = DynamicCollator()
+        collator = DynamicCollator(config.block_size)
 
         train_loader = DataLoader(
             self.train_dataset,
